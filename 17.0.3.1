@@ -1,0 +1,28 @@
+##
+# OracleJDK 17.0.1
+##
+
+FROM ubuntu:22.04
+
+ENV JAVA_VERSION="17.0.3.1"
+    # configure java runtiem
+ENV JAVA_HOME=/opt/java
+ENV CLASSPATH="."
+ENV PATH="$PATH:$JAVA_HOME/bin"
+
+RUN mkdir -p /opt
+
+# COPY jdk1.8.0_271/ /opt/java
+
+RUN apt update && apt -y install curl; \
+   # Clean up
+   apt clean; \
+   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*; \
+   # install Oracle JDK
+   mkdir -p /opt \
+   && curl --fail --silent --location --retry 3 \ 
+   --header "Cookie: oraclelicense=accept-securebackup-cookie; " \
+   https://download.oracle.com/java/17/latest/jdk-17_linux-x64_bin.tar.gz \
+   | gunzip \
+   | tar -x -C /opt \
+   && ln -s /opt/jdk-${JAVA_VERSION} ${JAVA_HOME}
